@@ -1,4 +1,3 @@
-import { Peer } from "peerjs";
 
 let localcamera = document.getElementById("localVideo");
 let remotecamera = document.getElementById("remoteVideo");

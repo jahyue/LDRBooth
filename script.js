@@ -6,7 +6,11 @@ const createButton = document.getElementById("createButton");
 const camera = document.getElementById("camera");
 const params = new URLSearchParams(window.location.search);
 const roomID = params.get("room");
-console.log(roomID);
+if (roomID) {
+    console.log("guest");
+}else {
+    console.log("host");
+}
 let stream = null;
 const setupCamera = async () => {
     try {

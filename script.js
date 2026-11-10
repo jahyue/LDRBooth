@@ -32,6 +32,9 @@ joinButton.addEventListener("click", async () => {
         call.on("stream", (remoteStream) => {
             remotecamera.srcObject = remoteStream;
         });
+        call.on("error", (err) => {
+            console.error("Call error:", err);
+        });
     });
 });
 createButton.addEventListener("click", async () => {
@@ -44,9 +47,13 @@ createButton.addEventListener("click", async () => {
         invitelink.href = `https://jahyue.github.io/LDRBooth/?room=${id}`;
     });
     peer.on("call", (call) => {
+        console.log("Incoming call from: " + call.peer);
         call.answer(stream);
         call.on("stream", (remoteStream) => {
             remotecamera.srcObject = remoteStream;
+        });
+        call.on("error", (err) => {
+            console.error("Call error:", err);
         });
     });
 });

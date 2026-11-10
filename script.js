@@ -3,6 +3,7 @@ let localcamera = document.getElementById("localVideo");
 let remotecamera = document.getElementById("remoteVideo");
 let invitelink = document.getElementById("invitelink");
 const createButton = document.getElementById("createButton");
+const joinButton = document.getElementById("joinButton");
 const camera = document.getElementById("camera");
 const params = new URLSearchParams(window.location.search);
 const roomID = params.get("room");
@@ -11,6 +12,7 @@ if (roomID) {
     createButton.style.display = "none";
 }else {
     console.log("host");
+    joinButton.style.display = "none";
 }
 let stream = null;
 const setupCamera = async () => {
@@ -21,7 +23,13 @@ const setupCamera = async () => {
     console.error("Error accessing camera and microphone:", error);
     }
 }
-
+joinButton.addEventListener("click", () => {
+    peer = new Peer();
+    setupCamera();
+    peer.on("open", (id) => {
+        console.log("My peer ID is: " + id);
+    });
+});
 createButton.addEventListener("click", () => {
     peer = new Peer();
     setupCamera();

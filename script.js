@@ -8,6 +8,7 @@ const params = new URLSearchParams(window.location.search);
 const roomID = params.get("room");
 if (roomID) {
     console.log("guest");
+    createButton.style.display = "none";
 }else {
     console.log("host");
 }
@@ -17,7 +18,7 @@ const setupCamera = async () => {
     stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
     localcamera.srcObject = stream;
     } catch (error) {
-        console.error("Error accessing camera and microphone:", error);
+    console.error("Error accessing camera and microphone:", error);
     }
 }
 

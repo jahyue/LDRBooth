@@ -23,20 +23,30 @@ const setupCamera = async () => {
     console.error("Error accessing camera and microphone:", error);
     }
 }
-joinButton.addEventListener("click", () => {
+joinButton.addEventListener("click", async () => {
     peer = new Peer();
-    setupCamera();
+    await setupCamera();
     peer.on("open", (id) => {
         console.log("My peer ID is: " + id);
+        const call = peer.call(roomID, stream);
+        call.on("stream", (remoteStream) => {
+            remotecamera.srcObject = remoteStream;
+        });
     });
 });
-createButton.addEventListener("click", () => {
+createButton.addEventListener("click", async () => {
     peer = new Peer();
-    setupCamera();
+    await setupCamera();
     peer.on("open", (id) => {
         console.log("Room ID: " + roomID);
         console.log("My peer ID is: " + id);
         invitelink.textContent = `Share this link to invite someone: https://jahyue.github.io/LDRBooth/?room=${id}`;
         invitelink.href = `https://jahyue.github.io/LDRBooth/?room=${id}`;
+    });
+    peer.on("call", (call) => {
+        call.answer(stream);
+        call.on("stream", (remoteStream) => {
+            remotecamera.srcObject = remoteStream;
+        });
     });
 });

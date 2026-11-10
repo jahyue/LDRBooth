@@ -1,23 +1,29 @@
-let peer = new Peer();
+let peer = null;
 let localcamera = document.getElementById("localVideo");
 let remotecamera = document.getElementById("remoteVideo");
 let invitelink = document.getElementById("invitelink");
+const createButton = document.getElementById("createButton");
 const camera = document.getElementById("camera");
 const params = new URLSearchParams(window.location.search);
 const roomID = params.get("room");
 console.log(roomID);
 let stream = null;
-peer.on("open", (id) => {
-    console.log("My peer ID is: " + id);
-    invitelink.textContent = `Share this link to invite someone: https://jahyue.github.io/LDRBooth/?room=${id}`;
-    invitelink.href = `https://jahyue.github.io/LDRBooth/?room=${id}`;
-});
-async function setupCamera() {
+const setupCamera = async () => {
     try {
     stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
     localcamera.srcObject = stream;
     } catch (error) {
         console.error("Error accessing camera and microphone:", error);
     }
-} 
-setupCamera();
+}
+
+createButton.addEventListener("click", () => {
+    peer = new Peer();
+    setupCamera();
+    peer.on("open", (id) => {
+        console.log("Room ID: " + roomID);
+        console.log("My peer ID is: " + id);
+        invitelink.textContent = `Share this link to invite someone: https://jahyue.github.io/LDRBooth/?room=${id}`;
+        invitelink.href = `https://jahyue.github.io/LDRBooth/?room=${id}`;
+    });
+});

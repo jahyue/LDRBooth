@@ -3,6 +3,9 @@ let localcamera = document.getElementById("localVideo");
 let remotecamera = document.getElementById("remoteVideo");
 let invitelink = document.getElementById("invitelink");
 const camera = document.getElementById("camera");
+const params = new URLSearchParams(window.location.search);
+const roomID = params.get("room");
+console.log(roomID);
 let stream = null;
 peer.on("open", (id) => {
     console.log("My peer ID is: " + id);

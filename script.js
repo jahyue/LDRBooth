@@ -3,6 +3,7 @@ let localcamera = document.getElementById("localVideo");
 let remotecamera = document.getElementById("remoteVideo");
 let invitelink = document.getElementById("invitelink");
 const createButton = document.getElementById("createButton");
+const startButton = document.getElementById("startButton");
 const joinButton = document.getElementById("joinButton");
 const camera = document.getElementById("camera");
 const ctx = camera.getContext("2d");
@@ -39,6 +40,15 @@ const setupCamera = async () => {
     console.error("Error accessing camera and microphone:", error);
     }
 }
+startButton.addEventListener("click", async () => {
+    camera.toBlob((blob) => {
+        const newImg = document.createElement('img');
+        const url = URL.createObjectURL(blob);
+  
+        newImg.src = url;
+        document.body.appendChild(newImg);
+    }, "image/jpeg",0.95);
+});
 joinButton.addEventListener("click", async () => {
     await setupCamera();
     peer = new Peer();

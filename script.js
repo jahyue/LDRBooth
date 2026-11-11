@@ -25,7 +25,7 @@ const setupCamera = async () => {
 }
 joinButton.addEventListener("click", async () => {
     peer = new Peer();
-    await setupCamera();
+    
     peer.on("open", (id) => {
         console.log("My peer ID is: " + id);
         const call = peer.call(roomID, stream);
@@ -38,8 +38,8 @@ joinButton.addEventListener("click", async () => {
     });
 });
 createButton.addEventListener("click", async () => {
-    peer = new Peer();
     await setupCamera();
+    peer = new Peer();  
     peer.on("open", (id) => {
         console.log("Room ID: " + roomID);
         console.log("My peer ID is: " + id);

@@ -7,6 +7,7 @@ const startButton = document.getElementById("startButton");
 const joinButton = document.getElementById("joinButton");
 const camera = document.getElementById("camera");
 const ctx = camera.getContext("2d");
+const photosDiv = document.getElementById("photos");
 const params = new URLSearchParams(window.location.search);
 const roomID = params.get("room");
 
@@ -46,7 +47,7 @@ startButton.addEventListener("click", async () => {
         const url = URL.createObjectURL(blob);
   
         newImg.src = url;
-        document.body.appendChild(newImg);
+        photosDiv.appendChild(newImg);
     }, "image/jpeg",0.95);
 });
 joinButton.addEventListener("click", async () => {

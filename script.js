@@ -5,8 +5,10 @@ let invitelink = document.getElementById("invitelink");
 const createButton = document.getElementById("createButton");
 const joinButton = document.getElementById("joinButton");
 const camera = document.getElementById("camera");
+const ctx = camera.getContext("2d");
 const params = new URLSearchParams(window.location.search);
 const roomID = params.get("room");
+
 if (roomID) {
     console.log("guest");
     createButton.style.display = "none";
@@ -14,16 +16,31 @@ if (roomID) {
     console.log("host");
     joinButton.style.display = "none";
 }
+function drawframe() {
+    const localcropWidth = localcamera.videoHeight *((camera.width / 2) / camera.height);
+    const localcropX = (localcamera.videoWidth - localcropWidth) / 2;
+ 
+    requestAnimationFrame(drawframe);
+    ctx.drawImage(localcamera, localcropX, 0, localcropWidth, localcamera.videoHeight, 0, 0, camera.width / 2, camera.height);
+    if (remotecamera.readyState >= 2) {
+           const remotecropWidth = remotecamera.videoHeight *((camera.width / 2) / camera.height);
+    const remotecropX = (remotecamera.videoWidth - remotecropWidth) / 2;
+        ctx.drawImage(remotecamera, remotecropX, 0, remotecropWidth, remotecamera.videoHeight, camera.width / 2, 0, camera.width / 2, camera.height);
+    }
+}
 let stream = null;
 const setupCamera = async () => {
     try {
     stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
     localcamera.srcObject = stream;
+    await localcamera.play();
+    drawframe();
     } catch (error) {
     console.error("Error accessing camera and microphone:", error);
     }
 }
 joinButton.addEventListener("click", async () => {
+    await setupCamera();
     peer = new Peer();
     
     peer.on("open", (id) => {

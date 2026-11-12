@@ -2,6 +2,7 @@ let peer = null;
 let localcamera = document.getElementById("localVideo");
 let remotecamera = document.getElementById("remoteVideo");
 let invitelink = document.getElementById("invitelink");
+let dataConnection = null;
 const createButton = document.getElementById("createButton");
 const startButton = document.getElementById("startButton");
 const joinButton = document.getElementById("joinButton");
@@ -48,15 +49,22 @@ startButton.addEventListener("click", async () => {
   
         newImg.src = url;
         photosDiv.appendChild(newImg);
+        dataConnection.send(blob);
     }, "image/jpeg",0.95);
+
 });
 joinButton.addEventListener("click", async () => {
     await setupCamera();
     peer = new Peer();
-    
     peer.on("open", (id) => {
         console.log("My peer ID is: " + id);
         const call = peer.call(roomID, stream);
+        dataConnection = peer.connect(roomID);
+        dataConnection.on("open", (data) => {
+            const image = document.createElement("img");
+    image.src = URL.createObjectURL(data);
+    photosDiv.appendChild(image);
+        });
         call.on("stream", (remoteStream) => {
             remotecamera.srcObject = remoteStream;
         });
@@ -67,13 +75,24 @@ joinButton.addEventListener("click", async () => {
 });
 createButton.addEventListener("click", async () => {
     await setupCamera();
-    peer = new Peer();  
+    peer = new Peer(); 
+    
     peer.on("open", (id) => {
         console.log("Room ID: " + roomID);
         console.log("My peer ID is: " + id);
         invitelink.textContent = `Share this link to invite someone: https://jahyue.github.io/LDRBooth/?room=${id}`;
         invitelink.href = `https://jahyue.github.io/LDRBooth/?room=${id}`;
     });
+    peer.on("connection", (dataConnection) => {
+        dataConnection = connection;
+    connection.on("data", (data) => {
+        const image = document.createElement("img");
+    image.src = URL.createObjectURL(data);
+    photosDiv.appendChild(image);
+
+       });
+    });
+
     peer.on("call", (call) => {
         console.log("Incoming call from: " + call.peer);
         call.answer(stream);

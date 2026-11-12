@@ -43,13 +43,19 @@ const setupCamera = async () => {
     }
 }
 startButton.addEventListener("click", async () => {
+    
     camera.toBlob((blob) => {
         const newImg = document.createElement('img');
         const url = URL.createObjectURL(blob);
   
         newImg.src = url;
         photosDiv.appendChild(newImg);
-        dataConnection.send(blob);
+        if (dataConnection && dataConnection.open) {
+            dataConnection.send(blob);
+        }else {
+            console.error("Data connection is not open. Cannot send image.");
+        }
+     
     }, "image/jpeg",0.95);
 
 });
@@ -60,7 +66,7 @@ joinButton.addEventListener("click", async () => {
         console.log("My peer ID is: " + id);
         const call = peer.call(roomID, stream);
         dataConnection = peer.connect(roomID);
-        dataConnection.on("open", (data) => {
+        dataConnection.on("data", (data) => {
             const image = document.createElement("img");
     image.src = URL.createObjectURL(data);
     photosDiv.appendChild(image);
@@ -83,15 +89,17 @@ createButton.addEventListener("click", async () => {
         invitelink.textContent = `Share this link to invite someone: https://jahyue.github.io/LDRBooth/?room=${id}`;
         invitelink.href = `https://jahyue.github.io/LDRBooth/?room=${id}`;
     });
-    peer.on("connection", (dataConnection) => {
+    peer.on("connection", (connection) => {
         dataConnection = connection;
-    connection.on("data", (data) => {
+        connection.on("data", (data) => {
         const image = document.createElement("img");
     image.src = URL.createObjectURL(data);
     photosDiv.appendChild(image);
 
        });
-    });
+    }); 
+    
+    
 
     peer.on("call", (call) => {
         console.log("Incoming call from: " + call.peer);

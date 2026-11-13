@@ -38,7 +38,7 @@ const setupCamera = async () => {
     localcamera.srcObject = stream;
     await localcamera.play();
     console.log("Camera and microphone access granted.");
-    
+
     drawframe();
     } catch (error) {
     console.error("Error accessing camera and microphone:", error);
@@ -52,11 +52,8 @@ startButton.addEventListener("click", async () => {
   
         newImg.src = url;
         photosDiv.appendChild(newImg);
-        if (dataConnection && dataConnection.open) {
-            dataConnection.send(blob);
-        }else {
-            console.error("Data connection is not open. Cannot send image.");
-        }
+        dataConnection.send(blob);
+        
      
     }, "image/jpeg",0.95);
 

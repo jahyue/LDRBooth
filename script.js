@@ -74,6 +74,10 @@ joinButton.addEventListener("click", async () => {
             console.log("Data connection established with host.");
         });
         dataConnection.on("data", (data) => {
+                console.log( data);
+    console.log( typeof data);
+    console.log( data instanceof Blob);
+    console.log( data?.constructor?.name);
             console.log("Received data from host.");
             const image = document.createElement("img");
     image.src = URL.createObjectURL(data);

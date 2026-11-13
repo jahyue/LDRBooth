@@ -37,6 +37,8 @@ const setupCamera = async () => {
     stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
     localcamera.srcObject = stream;
     await localcamera.play();
+    console.log("Camera and microphone access granted.");
+    
     drawframe();
     } catch (error) {
     console.error("Error accessing camera and microphone:", error);

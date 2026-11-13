@@ -52,7 +52,12 @@ startButton.addEventListener("click", async () => {
   
         newImg.src = url;
         photosDiv.appendChild(newImg);
+        if (dataConnection && dataConnection.open) {
         dataConnection.send(blob);
+        console.log("photo sent")
+        }else {
+            console.log("data connection not open, photo not sent")
+        }
         
      
     }, "image/jpeg",0.95);
@@ -69,6 +74,7 @@ joinButton.addEventListener("click", async () => {
             console.log("Data connection established with host.");
         });
         dataConnection.on("data", (data) => {
+            console.log("Received data from host.");
             const image = document.createElement("img");
     image.src = URL.createObjectURL(data);
     photosDiv.appendChild(image);

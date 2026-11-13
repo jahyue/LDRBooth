@@ -86,7 +86,6 @@ createButton.addEventListener("click", async () => {
     peer = new Peer(); 
     
     peer.on("open", (id) => {
-        console.log("Room ID: " + roomID);
         console.log("My peer ID is: " + id);
         invitelink.textContent = `Share this link to invite someone: https://jahyue.github.io/LDRBooth/?room=${id}`;
         invitelink.href = `https://jahyue.github.io/LDRBooth/?room=${id}`;
@@ -98,8 +97,8 @@ createButton.addEventListener("click", async () => {
         });
         connection.on("data", (data) => {
         const image = document.createElement("img");
-    image.src = URL.createObjectURL(data);
-    photosDiv.appendChild(image);
+        image.src = URL.createObjectURL(data);
+      photosDiv.appendChild(image);
 
        });
     }); 

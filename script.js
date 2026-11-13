@@ -66,6 +66,9 @@ joinButton.addEventListener("click", async () => {
         console.log("My peer ID is: " + id);
         const call = peer.call(roomID, stream);
         dataConnection = peer.connect(roomID);
+        dataConnection.on("open", () => {
+            console.log("Data connection established with host.");
+        });
         dataConnection.on("data", (data) => {
             const image = document.createElement("img");
     image.src = URL.createObjectURL(data);
@@ -91,6 +94,9 @@ createButton.addEventListener("click", async () => {
     });
     peer.on("connection", (connection) => {
         dataConnection = connection;
+        dataConnection.on("open", () => {
+            console.log("Data connection established with guest.");
+        });
         connection.on("data", (data) => {
         const image = document.createElement("img");
     image.src = URL.createObjectURL(data);
